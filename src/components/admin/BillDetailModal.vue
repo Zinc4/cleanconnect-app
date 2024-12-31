@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
 
 interface BillDetail {
@@ -25,10 +25,10 @@ const verifyPayment = () => {
 const imageError = ref(false);
 const imageLoaded = ref(false);
 
-const handleImageError = (event: Event) => {
-  imageError.value = true;
-  console.error("Failed to load image");
-};
+// const handleImageError = (event: Event) => {
+//   imageError.value = true;
+//   console.error("Failed to load image");
+// };
 
 // Add new method to handle image loading
 const resetImageError = () => {

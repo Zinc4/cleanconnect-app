@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import {
   ChevronUpDownIcon,
   EyeIcon,
   DocumentArrowDownIcon,
 } from "@heroicons/vue/24/outline";
 import { getAdminBills, type AdminBill } from "@/services/adminBillService";
-import { formatDate, formatCurrency, formatMonth } from "@/utils/dateUtils";
+import { formatDate, formatCurrency } from "@/utils/dateUtils";
 import BillDetailModal from "./BillDetailModal.vue";
 import BillingDownload from "./BillingDownload.vue";
 import axios from "axios";

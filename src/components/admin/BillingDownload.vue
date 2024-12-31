@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ArrowDownTrayIcon } from "@heroicons/vue/24/outline";
-import { formatMonth } from "@/utils/dateUtils";
 import exportFromJSON from "export-from-json";
 
 const props = defineProps<{
