@@ -10,7 +10,7 @@ import {
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 
-const props = defineProps<{
+const { currentPage, isOpen } = defineProps<{
   currentPage: string;
   isOpen: boolean;
 }>();

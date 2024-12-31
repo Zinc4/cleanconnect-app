@@ -22,7 +22,7 @@ const filters = [
 
 <template>
   <div class="flex min-h-screen bg-gray-50">
-    <UserSidebar currentPage="Payment History" />
+    <UserSidebar currentPage="Payment History" :isOpen="true" />
     <main class="flex-1 ml-64">
       <div class="p-8 -ml-64">
         <!-- Header Section -->

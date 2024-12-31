@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { XMarkIcon, ArrowUpTrayIcon } from "@heroicons/vue/24/outline";
-import { payBill, getBillDetail } from "@/services/userBillService";
+import { payBill } from "@/services/userBillService";
 import axios from "axios";
 
 const props = defineProps<{
@@ -17,18 +17,18 @@ const selectedFile = ref<File | null>(null);
 const loading = ref(false);
 const error = ref<string | null>(null);
 
-const billDetail = ref({
-  id: "",
-  description: "",
-  amount: 0,
-  bill_date: "",
-  bill_due: "",
-  status: "",
-  category: "",
-  additional_bill_name: "",
-  additional_amount: 0,
-  qr_url: "",
-});
+// const billDetail = ref({
+//   id: "",
+//   description: "",
+//   amount: 0,
+//   bill_date: "",
+//   bill_due: "",
+//   status: "",
+//   category: "",
+//   additional_bill_name: "",
+//   additional_amount: 0,
+//   qr_url: "",
+// });
 
 const handleFileSelect = (event: Event) => {
   const input = event.target as HTMLInputElement;

@@ -5,9 +5,7 @@ import Sidebar from "../components/Sidebar.vue";
 import BillingStats from "../components/admin/BillingStats.vue";
 import BillingTable from "../components/admin/BillingTable.vue";
 import BillingFilter from "../components/admin/BillingFilter.vue";
-import BillingDownload from "../components/admin/BillingDownload.vue";
 import { getAdminBills, type AdminBill } from "@/services/adminBillService";
-import { formatMonth } from "@/utils/dateUtils";
 
 const searchQuery = ref("");
 const selectedMonth = ref(new Date().toISOString().slice(0, 7));
@@ -68,10 +66,11 @@ onMounted(async () => {
 const filteredBills = computed(() => {
   return bills.value.filter((bill) => {
     const matchesSearch =
-      bill.customerName
+      bill.username.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      bill.bill_no
+        .toString()
         .toLowerCase()
-        .includes(searchQuery.value.toLowerCase()) ||
-      bill.billNumber.toLowerCase().includes(searchQuery.value.toLowerCase());
+        .includes(searchQuery.value.toLowerCase());
     const matchesStatus =
       selectedStatus.value === "all" || bill.status === selectedStatus.value;
     const billMonth = bill.date.slice(0, 7);
@@ -86,24 +85,24 @@ const handleFilter = (filters: { month: string; status: string }) => {
   selectedStatus.value = filters.status;
 };
 
-const updateStats = () => {
-  const monthlyBills = filteredBills.value;
-  stats.value = {
-    totalBills: monthlyBills.length,
-    totalAmount: monthlyBills.reduce((sum, bill) => sum + bill.amount, 0),
-    paidAmount: monthlyBills
-      .filter((bill) => bill.status === "paid")
-      .reduce((sum, bill) => sum + bill.amount, 0),
-    pendingAmount: monthlyBills
-      .filter((bill) => bill.status === "pending" || bill.status === "overdue")
-      .reduce((sum, bill) => sum + bill.amount, 0),
-  };
-};
+// const updateStats = () => {
+//   const monthlyBills = filteredBills.value;
+//   stats.value = {
+//     totalBills: monthlyBills.length,
+//     totalAmount: monthlyBills.reduce((sum, bill) => sum + bill.amount, 0),
+//     paidAmount: monthlyBills
+//       .filter((bill) => bill.status === "paid")
+//       .reduce((sum, bill) => sum + bill.amount, 0),
+//     pendingAmount: monthlyBills
+//       .filter((bill) => bill.status === "pending" || bill.status === "overdue")
+//       .reduce((sum, bill) => sum + bill.amount, 0),
+//   };
+// };
 </script>
 
 <template>
   <div class="flex min-h-screen bg-gray-50">
-    <Sidebar currentPage="Billing Management" />
+    <Sidebar currentPage="Billing Management" :isOpen="true" />
     <main class="flex-1 ml-64">
       <div class="p-8 -ml-64">
         <!-- Header Section -->

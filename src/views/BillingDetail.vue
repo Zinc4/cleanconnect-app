@@ -18,7 +18,7 @@ const loading = ref(true);
 const error = ref<string | null>(null);
 
 const billDetail = ref({
-  id: "",
+  id: 0,
   description: "",
   amount: 0,
   bill_date: "",
@@ -82,7 +82,7 @@ const getStatusColor = (status: string) => {
 
 <template>
   <div class="flex min-h-screen bg-gray-50">
-    <UserSidebar currentPage="Billing" />
+    <UserSidebar currentPage="Billing" :isOpen="true" />
     <main class="flex-1 lg:ml-64">
       <div class="p-4 lg:p-8 -ml-64">
         <!-- Header Section -->

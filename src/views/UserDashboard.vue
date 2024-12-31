@@ -13,18 +13,18 @@ import { getBills, type Bills } from "@/services/userBillService";
 import UserSidebar from "../components/UserSidebar.vue";
 import router from "@/router";
 
-interface BillingItem {
-  id: string;
-  name: string;
-  price: number;
-  status: "active" | "inactive";
-  date: string;
-}
+// interface BillingItem {
+//   id: string;
+//   name: string;
+//   price: number;
+//   status: "active" | "inactive";
+//   date: string;
+// }
 
 const searchQuery = ref("");
 const currentFilter = ref("all");
 const currentPage = ref(1);
-const itemsPerPage = 5;
+// const itemsPerPage = 5;
 
 const filters = [
   { id: "all", name: "All" },
@@ -140,7 +140,7 @@ const getStatusColor = (status: string) => {
 
 <template>
   <div class="flex min-h-screen bg-gray-50">
-    <UserSidebar currentPage="Dashboard" />
+    <UserSidebar currentPage="Dashboard" :isOpen="true" />
     <main class="flex-1 ml-64">
       <div class="p-8 -ml-64">
         <!-- Header Section -->
