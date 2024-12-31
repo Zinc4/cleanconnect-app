@@ -66,7 +66,7 @@ const getStatusColor = (status: string) => {
 const viewBillDetails = async (billId: string) => {
   try {
     const response = await axios.get(
-      `http://127.0.0.1:3000/api/admin/payments/bill/${billId}`,
+      `https://sensible-annabal-cleanconnect-170c1a9e.koyeb.app/api/admin/payments/bill/${billId}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

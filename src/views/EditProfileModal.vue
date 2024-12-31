@@ -66,7 +66,7 @@ const updateProfile = async () => {
     if (!token) throw new Error("Token not found");
 
     const response = await axios.put(
-      "http://127.0.0.1:3000/api/user/profile",
+      "https://sensible-annabal-cleanconnect-170c1a9e.koyeb.app/api/user/profile",
       formData,
       {
         headers: {

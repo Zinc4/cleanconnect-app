@@ -59,9 +59,12 @@ const fetchUserProfile = async () => {
     const token = localStorage.getItem("token"); // Assuming you use token authentication
     if (!token) throw new Error("Token not found");
 
-    const response = await axios.get("http://127.0.0.1:3000/api/user/profile", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.get(
+      "https://sensible-annabal-cleanconnect-170c1a9e.koyeb.app/api/user/profile",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
 
     // Map response to userProfile
     const data = response.data.data;
