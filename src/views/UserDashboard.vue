@@ -12,14 +12,7 @@ import {
 import { getBills, type Bills } from "@/services/userBillService";
 import UserSidebar from "../components/UserSidebar.vue";
 import router from "@/router";
-
-// interface BillingItem {
-//   id: string;
-//   name: string;
-//   price: number;
-//   status: "active" | "inactive";
-//   date: string;
-// }
+import axios from "axios";
 
 const searchQuery = ref("");
 const currentFilter = ref("all");
@@ -34,53 +27,36 @@ const filters = [
   { id: "date", name: "Date" },
 ];
 
-// const billingItems = ref<BillingItem[]>([
-//   {
-//     id: "1",
-//     name: "Kebersihan 2",
-//     price: 150000,
-//     status: "active",
-//     date: "2024-03-01",
-//   },
-//   {
-//     id: "2",
-//     name: "Kebersihan 3",
-//     price: 200000,
-//     status: "inactive",
-//     date: "2024-03-02",
-//   },
-//   {
-//     id: "3",
-//     name: "Kebersihan 1",
-//     price: 100000,
-//     status: "active",
-//     date: "2024-03-03",
-//   },
-//   {
-//     id: "4",
-//     name: "Kebersihan 4",
-//     price: 250000,
-//     status: "active",
-//     date: "2024-03-04",
-//   },
-//   {
-//     id: "5",
-//     name: "Kebersihan 2",
-//     price: 150000,
-//     status: "inactive",
-//     date: "2024-03-05",
-//   },
-// ]);
-
 const statistics = ref({
-  totalBills: 5,
-  totalCosts: 850000,
-  activeOrders: 3,
-  percentageChange: {
-    bills: 12,
-    costs: 8,
-    orders: 15,
-  },
+  activeBills: 0,
+  totalAmount: 0,
+  totalBills: 0,
+});
+
+const fetchDashboardData = async () => {
+  try {
+    const token = localStorage.getItem("token"); // Ganti dengan token valid
+    const response = await axios.get(
+      "https://sensible-annabal-cleanconnect-170c1a9e.koyeb.app/api/user/total-dashboard",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.data.status) {
+      statistics.value = response.data.data;
+    } else {
+      console.error(response.data.message || "Failed to fetch dashboard data");
+    }
+  } catch (error) {
+    console.error("Error fetching dashboard data:", error);
+  }
+};
+
+onMounted(() => {
+  fetchDashboardData();
 });
 
 const loading = ref(false);
@@ -162,7 +138,7 @@ const getStatusColor = (status: string) => {
                 <ChartBarIcon class="h-6 w-6 text-blue-500" />
               </div>
               <span class="text-sm font-medium text-green-600">
-                +{{ statistics.percentageChange.bills }}%
+                <!-- +{{ statistics.percentageChange.bills }}% -->
               </span>
             </div>
             <h3 class="text-sm font-medium text-gray-500">Total Bills</h3>
@@ -184,13 +160,13 @@ const getStatusColor = (status: string) => {
                 <CurrencyDollarIcon class="h-6 w-6 text-green-500" />
               </div>
               <span class="text-sm font-medium text-green-600">
-                +{{ statistics.percentageChange.costs }}%
+                <!-- +{{ statistics.percentageChange.costs }}% -->
               </span>
             </div>
-            <h3 class="text-sm font-medium text-gray-500">Total Costs</h3>
+            <h3 class="text-sm font-medium text-gray-500">Total Biaya</h3>
             <div class="mt-2 flex items-baseline">
               <p class="text-2xl font-bold text-gray-900">
-                {{ formatPrice(statistics.totalCosts) }}
+                {{ formatPrice(statistics.totalAmount) }}
               </p>
             </div>
             <p class="mt-2 text-xs text-gray-500">Total spending this month</p>
@@ -205,13 +181,15 @@ const getStatusColor = (status: string) => {
                 <ClockIcon class="h-6 w-6 text-purple-500" />
               </div>
               <span class="text-sm font-medium text-green-600">
-                +{{ statistics.percentageChange.orders }}%
+                <!-- +{{ statistics.percentageChange.orders }}% -->
               </span>
             </div>
-            <h3 class="text-sm font-medium text-gray-500">Active Orders</h3>
+            <h3 class="text-sm font-medium text-gray-500">
+              Tagihan yang Aktif
+            </h3>
             <div class="mt-2 flex items-baseline">
               <p class="text-2xl font-bold text-gray-900">
-                {{ statistics.activeOrders }}
+                {{ statistics.activeBills }}
               </p>
               <p class="ml-2 text-sm text-gray-500">orders</p>
             </div>

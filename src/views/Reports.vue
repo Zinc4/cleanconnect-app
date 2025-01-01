@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import PaymentTable from '../components/PaymentTable.vue';
-import WeeklyPayments from '../components/WeeklyPayments.vue';
-import PendingPayments from '../components/PendingPayments.vue';
+import PaymentTable from "../components/PaymentTable.vue";
+import PendingPayments from "../components/PendingPayments.vue";
 </script>
 
 <template>
@@ -10,7 +9,7 @@ import PendingPayments from '../components/PendingPayments.vue';
       <PaymentTable />
     </div>
     <div class="col-span-12 lg:col-span-8">
-      <WeeklyPayments />
+      <!-- <WeeklyPayments /> -->
     </div>
     <div class="col-span-12 lg:col-span-4">
       <PendingPayments />

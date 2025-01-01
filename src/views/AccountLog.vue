@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import axios from "axios";
 import {
   MagnifyingGlassIcon,
   CalendarIcon,
@@ -8,18 +9,18 @@ import {
 import UserSidebar from "../components/UserSidebar.vue";
 
 interface LogEntry {
-  id: string;
-  type: "profile" | "password" | "email" | "address";
+  id: number;
+  type: string;
   description: string;
   oldValue: string;
   newValue: string;
   timestamp: string;
-  status: "success" | "pending" | "failed";
+  status: string;
 }
 
 const searchQuery = ref("");
 const selectedFilter = ref("all");
-const currentPage = ref(1);
+// const currentPage = ref(1);
 
 const filters = [
   { id: "all", name: "All Changes" },
@@ -29,44 +30,41 @@ const filters = [
   { id: "address", name: "Address Changes" },
 ];
 
-const logEntries = ref<LogEntry[]>([
-  {
-    id: "1",
-    type: "profile",
-    description: "Profile information updated",
-    oldValue: "John Doe",
-    newValue: "John Smith",
-    timestamp: "2024-03-15 14:30:00",
-    status: "success",
-  },
-  {
-    id: "2",
-    type: "email",
-    description: "Email address changed",
-    oldValue: "john.doe@example.com",
-    newValue: "john.smith@example.com",
-    timestamp: "2024-03-14 09:15:00",
-    status: "success",
-  },
-  {
-    id: "3",
-    type: "password",
-    description: "Password changed",
-    oldValue: "********",
-    newValue: "********",
-    timestamp: "2024-03-13 16:45:00",
-    status: "success",
-  },
-  {
-    id: "4",
-    type: "address",
-    description: "Address updated",
-    oldValue: "123 Old St, City",
-    newValue: "456 New Ave, Town",
-    timestamp: "2024-03-12 11:20:00",
-    status: "success",
-  },
-]);
+const logEntries = ref<LogEntry[]>([]);
+
+const fetchLogEntries = async () => {
+  try {
+    const token = localStorage.getItem("token"); // Ganti dengan token valid
+    const response = await axios.get(
+      "https://sensible-annabal-cleanconnect-170c1a9e.koyeb.app/api/user/logs",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.data.status) {
+      logEntries.value = response.data.data.map((log: any) => ({
+        id: log.id,
+        type: log.change_type.split(" ")[1].toLowerCase(), // Menyesuaikan tipe
+        description: log.change_type,
+        oldValue: log.old_value,
+        newValue: log.new_value,
+        timestamp: log.created_at,
+        status: log.status,
+      }));
+    } else {
+      console.error(response.data.message || "Failed to fetch logs");
+    }
+  } catch (error) {
+    console.error("Error fetching logs:", error);
+  }
+};
+
+onMounted(() => {
+  fetchLogEntries();
+});
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -200,30 +198,6 @@ const getTypeIcon = (type: string) => {
                     {{ new Date(entry.timestamp).toLocaleString() }}
                   </p>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pagination -->
-          <div class="px-6 py-4 border-t border-gray-100">
-            <div class="flex items-center justify-between">
-              <p class="text-sm text-gray-600">
-                Showing page {{ currentPage }} of
-                {{ Math.ceil(logEntries.length / 10) }}
-              </p>
-              <div class="flex gap-2">
-                <button
-                  class="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50"
-                  :disabled="currentPage === 1"
-                >
-                  Previous
-                </button>
-                <button
-                  class="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50"
-                  :disabled="currentPage >= Math.ceil(logEntries.length / 10)"
-                >
-                  Next
-                </button>
               </div>
             </div>
           </div>

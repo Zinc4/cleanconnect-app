@@ -5,53 +5,12 @@ import {
   TrashIcon,
   ChevronUpDownIcon,
 } from "@heroicons/vue/24/outline";
-import { getAdminUsers, type User } from "@/services/adminUserService";
+import {
+  deleteAdminUser,
+  getAdminUsers,
+  type User,
+} from "@/services/adminUserService";
 
-// interface User {
-//   uid: string;
-//   name: string;
-//   address: string;
-//   scno: string;
-//   amount: number;
-// }
-
-// const users = ref<User[]>([
-//   {
-//     uid: "UID001",
-//     name: "John Smith",
-//     address: "123 Main St, City",
-//     scno: "SC001",
-//     amount: 1250.0,
-//   },
-//   {
-//     uid: "UID002",
-//     name: "Emma Wilson",
-//     address: "456 Oak Ave, Town",
-//     scno: "SC002",
-//     amount: 890.5,
-//   },
-//   {
-//     uid: "UID003",
-//     name: "Michael Brown",
-//     address: "789 Pine Rd, Village",
-//     scno: "SC003",
-//     amount: 2100.75,
-//   },
-//   {
-//     uid: "UID004",
-//     name: "Sarah Davis",
-//     address: "321 Elm St, County",
-//     scno: "SC004",
-//     amount: 1575.25,
-//   },
-//   {
-//     uid: "UID005",
-//     name: "James Johnson",
-//     address: "654 Maple Dr, District",
-//     scno: "SC005",
-//     amount: 945.0,
-//   },
-// ]);
 const loading = ref(false);
 const error = ref<string | null>(null);
 const users = ref<User[]>([]);
@@ -84,6 +43,28 @@ const sortBy = (field: keyof User) => {
     if (a[field] > b[field]) return 1 * modifier;
     return 0;
   });
+};
+
+const deleteUser = async (id: number) => {
+  const confirmation = window.confirm(
+    "Are you sure you want to delete this user?"
+  );
+  if (!confirmation) return;
+
+  try {
+    loading.value = true;
+    const response = await deleteAdminUser(String(id));
+    if (response.status) {
+      users.value = users.value.filter((user) => user.id !== id);
+      alert(response.message);
+    } else {
+      alert("Failed to delete user.");
+    }
+  } catch (err: any) {
+    alert(`Error: ${err.message}`);
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 
@@ -158,7 +139,9 @@ const sortBy = (field: keyof User) => {
                   <PencilSquareIcon class="h-5 w-5" />
                 </button>
                 <button
+                  @click="deleteUser(user.id)"
                   class="text-red-600 hover:text-red-700 transition-colors duration-150"
+                  title="Delete User"
                 >
                   <TrashIcon class="h-5 w-5" />
                 </button>

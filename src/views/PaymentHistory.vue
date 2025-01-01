@@ -16,7 +16,6 @@ const filters = [
   { id: "all", name: "All Payments" },
   { id: "paid", name: "Paid" },
   { id: "pending", name: "Pending" },
-  { id: "overdue", name: "Overdue" },
 ];
 </script>
 

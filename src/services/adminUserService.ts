@@ -27,3 +27,12 @@ export const getAdminUsers = async (): Promise<User[]> => {
     throw new Error(error.response?.data?.message || "Failed to fetch users");
   }
 };
+
+export const deleteAdminUser = async (
+  id: string
+): Promise<{ status: boolean; message: string }> => {
+  const response = await axios.delete(`${API_BASE_URL}/users/${id}`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+  return response.data;
+};
