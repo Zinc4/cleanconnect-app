@@ -8,6 +8,40 @@ const dashboardData = ref({
   totalUser: 0,
 });
 
+const notifications = ref<
+  {
+    id: number;
+    notification: string;
+    username: string;
+    user_id: number;
+    amount: number;
+    created_at: string;
+  }[]
+>([]);
+
+const fetchNotifications = async () => {
+  try {
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImV4cCI6MTczNTg2MzkwMCwicm9sZSI6ImFkbWluIiwidXNlcklEIjo5fQ.EYO_c390DN0ii0PMEV-uIoAQNBWGItvPLjjejpYguw8";
+    const response = await axios.get(
+      "http://127.0.0.1:8080/api/admin/notifications",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.data.status) {
+      notifications.value = response.data.data;
+    } else {
+      console.error(response.data.message || "Failed to fetch notifications");
+    }
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+  }
+};
+
 const fetchDashboardData = async () => {
   try {
     const token = localStorage.getItem("token"); // Ganti dengan token valid
@@ -32,6 +66,7 @@ const fetchDashboardData = async () => {
 
 onMounted(() => {
   fetchDashboardData();
+  fetchNotifications();
 });
 </script>
 
@@ -75,19 +110,30 @@ onMounted(() => {
       <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
       <div class="space-y-4">
         <div
-          v-for="i in 5"
-          :key="i"
+          v-for="notification in notifications"
+          :key="notification.id"
           class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0"
         >
           <div>
-            <p class="font-medium text-gray-900">User Payment Received</p>
-            <p class="text-sm text-gray-500">John Doe - SC001</p>
+            <p class="font-medium text-gray-900">
+              {{ notification.notification }}
+            </p>
+            <p class="text-sm text-gray-500">
+              {{ notification.username }} - {{ notification.user_id }}
+            </p>
           </div>
           <div class="text-right">
-            <p class="font-medium text-green-600">$125.00</p>
-            <p class="text-sm text-gray-500">2 hours ago</p>
+            <p class="font-medium text-green-600">
+              Rp.{{ notification.amount }}
+            </p>
+            <p class="text-sm text-gray-500">
+              {{ new Date(notification.created_at).toLocaleString() }}
+            </p>
           </div>
         </div>
+        <p v-if="notifications.length === 0" class="text-sm text-gray-500">
+          No recent activities found.
+        </p>
       </div>
     </div>
   </div>
