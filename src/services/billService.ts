@@ -5,8 +5,7 @@ const API_BASE_URL =
 
 export interface User {
   id: number;
-  first_name: string;
-  last_name: string;
+  name: string;
   email: string;
   role: string;
   kategori: string;
