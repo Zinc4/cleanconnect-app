@@ -4,7 +4,7 @@ const API_BASE_URL =
   "https://sensible-annabal-cleanconnect-170c1a9e.koyeb.app/api/admin";
 
 export interface User {
-  ID: number;
+  id: number;
   first_name: string;
   last_name: string;
   email: string;

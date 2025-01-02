@@ -176,7 +176,7 @@ const resetForm = () => {
       >
         <option value="0" disabled>Select a customer</option>
         <option value="0">All Customers</option>
-        <option v-for="user in users" :key="user.ID" :value="user.ID">
+        <option v-for="user in users" :key="user.id" :value="user.id">
           {{ user.first_name }} {{ user.last_name }} - {{ user.kategori }}
         </option>
         <option v-if="users.length === 0" disabled>No customers found</option>

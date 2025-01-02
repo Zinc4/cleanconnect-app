@@ -21,10 +21,9 @@ const notifications = ref<
 
 const fetchNotifications = async () => {
   try {
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImV4cCI6MTczNTg2MzkwMCwicm9sZSI6ImFkbWluIiwidXNlcklEIjo5fQ.EYO_c390DN0ii0PMEV-uIoAQNBWGItvPLjjejpYguw8";
+    const token = localStorage.getItem("token"); // Ambil token dari localStorage
     const response = await axios.get(
-      "http://127.0.0.1:8080/api/admin/notifications",
+      "https://sensible-annabal-cleanconnect-170c1a9e.koyeb.app/api/admin/notifications",
       {
         headers: {
           Authorization: `Bearer ${token}`,
